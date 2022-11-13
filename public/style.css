@@ -1,0 +1,96 @@
+body {
+  background-color: rgb(153, 153, 211);
+}
+.addImgForm {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: #000000b7;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+.invis {
+  opacity: 0;
+  z-index: -1;
+}
+.addImgForm form {
+  height: 200px;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  background-color: rgb(165, 255, 225);
+  border-radius: 20px;
+  position: relative;
+}
+.addImgForm label {
+  color: black;
+  margin: 20px 0px 0px 0px;
+}
+.addImgForm form input {
+  width: 50%;
+}
+.addImgForm form span {
+  position: absolute;
+  top: 10px;
+  right: 25px !important;
+  color: rgb(68, 67, 67) !important;
+  opacity: 100% !important;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px !important;
+  border-radius: 5px;
+}
+.addImgForm form span:hover {
+  border: 1px solid;
+}
+.allPost {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 30px;
+}
+.post {
+  width: 25%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.postId{
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+.postImg {
+  width: 200px;
+  border: 1px solid;
+  border-radius: 10px 10px 0px 0px;
+  height: 253px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background: aliceblue;
+}
+.postImg img{
+
+}
+.postBtns {
+  background: aliceblue;
+  width: 200px;
+  border: 1px solid;
+  border-radius: 0px 0px 10px 10px;
+  border-top: 0;
+  display: flex;
+  justify-content: center;
+}
