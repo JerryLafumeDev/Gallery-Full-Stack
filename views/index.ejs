@@ -1,25 +1,108 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-    <title>21 Savage Fan Site</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-
-    <div class="jumbotron text-center">
-        <h1>21 Savage Fan Site</h1>
-        <img src="img/savage21.jpg" alt="21 Savage Profile Photo">
-
-        <p>Login or Signup:</p>
-
-        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span>Login</a>
-        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span>Signup</a>
-
+  <head>
+    <title>My Gallery</title>
+    <link rel="stylesheet" href="/index.css" />
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      defer
+    ></script>
+    <script src="https://codepen.io/andytran/pen/vLmRVp.js" defer></script>
+    <script src="/index.js" defer></script>
+  </head>
+  <body>
+    <!-- Form-->
+    <div class="form">
+      <div class="form-toggle"></div>
+      <div class="form-panel one">
+        <div class="form-header">
+          <h1>Account Login</h1>
+        </div>
+        <% if (logMessage.length > 0) { %>
+        <div
+          class="alert alert-danger"
+          style="color: red; margin: 0px 0px 20px 0px"
+        >
+          <%= logMessage %>
+        </div>
+        <% } %>
+        <div class="form-content">
+          <form action="/login" method="post">
+            <div class="form-group">
+              <label for="Email">Email</label>
+              <input type="email" id="email" name="email" required="required" />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-remember">
+                <input type="checkbox" />Remember Me </label
+              ><a class="form-recovery" href="#"> Need to Register?</a>
+            </div>
+            <div class="form-group">
+              <button type="submit">Log In</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="form-panel two">
+        <div class="form-header">
+          <h1>Register Account</h1>
+        </div>
+        <% if (signMessage.length > 0) { %>
+        <div
+          class="alert alert-danger"
+          style="color: red; margin: 0px 0px 20px 0px"
+        >
+          <%= signMessage %>
+        </div>
+        <% } %>
+        <div class="form-content">
+          <form action="/signup" method="post">
+            <div class="form-group">
+              <label for="userName">Username</label>
+              <input
+                type="text"
+                id="userName"
+                name="userName"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required="required" />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <label for="cPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="cPassword"
+                name="cPassword"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <button type="submit">Register</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-
-</div>
-</body>
+  </body>
 </html>

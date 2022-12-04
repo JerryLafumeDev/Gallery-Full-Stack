@@ -1,6 +1,9 @@
 // config/database.js
-module.exports = {
+const dbName = "Gallery";
+const userName = "jerry";
+const passWord = "jerry";
 
-    'url' : 'mongodb+srv://vikiana:a123b@cluster0.6ozuol9.mongodb.net/gallery?retryWrites=true&w=majority', 
-    'dbName': 'gallery'
+module.exports = {
+  url: `mongodb+srv://${userName}:${passWord}@cluster0.sqkte.mongodb.net/${dbName}?retryWrites=true&w=majority`,
+  dbName: "Gallery",
 };
