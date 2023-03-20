@@ -8,6 +8,7 @@ var userSchema = mongoose.Schema({
   firstTitle: String,
   secondTitle: String,
   bio: String,
+  themeColor: String,
   profileImg: String,
   bannerImg: String,
   followers: Array,

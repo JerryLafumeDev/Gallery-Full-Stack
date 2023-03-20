@@ -173,3 +173,81 @@ document.querySelectorAll(".card-love.unlike").forEach((e) => {
     evt.target.innerText = result ? "favorite" : "favorite_border";
   });
 });
+
+document.querySelector(".chatDrawer").addEventListener("click", () => {
+  // document.querySelector(".sidebar").style.left =
+  //   "calc(var(--sidebar-width) - var(--sidebar-width) - var(--sidebar-width))";
+  document.querySelector(".sidebar.position-fixed").style.transform =
+    "translateX(calc(var(--sidebar-width) - var(--sidebar-width) - var(--sidebar-width)))";
+  document.querySelector("#wrapper").style.marginLeft = "0";
+  document.querySelector("#wrapper").style.width = "80%";
+  document.querySelector("span.followers").style.transform =
+    "translateX(-300px)";
+  document.querySelector("span.following").style.transform =
+    "translateX(-315px)";
+});
+document.querySelector(".sideDrawer").addEventListener("click", () => {
+  // document.querySelector(".sidebar").style.left =
+  //   "calc(var(--sidebar-width) - var(--sidebar-width) - var(--sidebar-width))";
+  document.querySelector(".sidebar.position-fixed").style.transform =
+    "translateX(0)";
+  document.querySelector("#wrapper").style.marginLeft = "var(--sidebar-width)";
+  document.querySelector("#wrapper").style.width = "100%";
+  document.querySelector("span.followers").style.transform = "translateX(0)";
+  document.querySelector("span.following").style.transform = "translateX(0)";
+});
+
+Array.from(document.querySelectorAll(".chatUser")).forEach((e) =>
+  e.addEventListener("click", (evt) => {
+    let classArrMain = [];
+    console.log(evt.target.children[0].innerText);
+    document.querySelector(".people-list").style.transform =
+      "translateY(-100vh)";
+    document.querySelector(".chatHistory").style.transform =
+      "translateY(-100vh)";
+
+    let selectedUserId = evt.target.children[0].innerText;
+    let selectedUserName = evt.target.children[2].children[0].innerText;
+    let selectedPfpUrl = evt.target.children[1].children[0].src;
+
+    document.querySelector(".chat-with").innerText = selectedUserName;
+    document.querySelector(".chat-pfp").src = selectedPfpUrl;
+    document.querySelector(".chat-otherUser").value = selectedUserId;
+
+    Array.from(document.querySelectorAll(".chatThreads")).forEach(
+      (element, index) => {
+        var classArr = element.classList[1].split("-");
+        classArrMain[index] = classArr;
+        console.log(classArr.includes(selectedUserId));
+        if (!classArr.includes(selectedUserId)) {
+          element.style.display = "none";
+        }
+      }
+    );
+    classArrMain = [].concat(...classArrMain);
+    console.log(classArrMain);
+    if (!classArrMain.includes(selectedUserId)) {
+      fetch("/getChat", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selectedUserId,
+        }),
+      }).then(function (response) {});
+    } else {
+      console.log("that chat has been generated already");
+    }
+  })
+);
+
+document.querySelector(".backArrow").addEventListener("click", (e) => {
+  console.log(e.target);
+  document.querySelector(".people-list").style.transform = "translateY(0vh)";
+  document.querySelector(".chatHistory").style.transform = "translateY(100vh)";
+
+  Array.from(document.querySelectorAll(".chatThreads")).forEach((element) => {
+    element.style.display = "block";
+  });
+});

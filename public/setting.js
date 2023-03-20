@@ -28,16 +28,6 @@ $(document).ready(function () {
             },
           },
         },
-        email: {
-          validators: {
-            notEmpty: {
-              message: "Please supply your email address",
-            },
-            emailAddress: {
-              message: "Please supply a valid email address",
-            },
-          },
-        },
         phone: {
           validators: {
             notEmpty: {
@@ -129,7 +119,6 @@ $(document).ready(function () {
 
 document.querySelector(".btn-warning").addEventListener("click", (e) => {
   e.preventDefault();
-
   let displayName = document.querySelector("#displayName").value,
     firstTitle = document.querySelector("#firstTitle").value,
     secondTitle = document.querySelector("#secondTitle").value,
@@ -137,6 +126,7 @@ document.querySelector(".btn-warning").addEventListener("click", (e) => {
     profileImg = document.querySelector("#profileImg").value,
     bannerImg = document.querySelector("#bannerImg").value,
     bio = document.querySelector("#bio").value,
+    themeColor = document.querySelector("#themeColor").value,
     _id = document.querySelector("#invisId").innerText;
 
   fetch("updateUser", {
@@ -151,6 +141,7 @@ document.querySelector(".btn-warning").addEventListener("click", (e) => {
       profileImg,
       bannerImg,
       bio,
+      themeColor,
     }),
   })
     .then((response) => {
@@ -158,11 +149,14 @@ document.querySelector(".btn-warning").addEventListener("click", (e) => {
     })
     .then((data) => {
       console.log(data);
-      window.location.assign("http://localhost:6060/home");
+      window.location.assign("http://localhost:6060/profile");
     });
+  setTimeout(() => {
+    window.location.assign("http://localhost:6060/profile");
+  }, 500);
 });
 
 document.querySelector(".btn-danger").addEventListener("click", (e) => {
   e.preventDefault();
-  window.location.assign("http://localhost:6060/home");
+  window.location.assign("http://localhost:6060/profile");
 });

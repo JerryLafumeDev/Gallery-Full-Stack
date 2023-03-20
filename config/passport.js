@@ -66,6 +66,7 @@ module.exports = function (passport) {
             newUser.firstTitle = "1st Title";
             newUser.secondTitle = "2nd Title";
             newUser.bio = "";
+            newUser.themeColor = "#000000";
             newUser.profileImg =
               "https://us.123rf.com/450wm/happyvector071/happyvector0711904/happyvector071190415714/121105442-creative-illustration-of-default-avatar-profile-placeholder-isolated-on-background-art-design-grey-p.jpg?ver=6";
             newUser.bannerImg =

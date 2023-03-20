@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="/setting.css">
   <link rel="stylesheet" href="/home.css" />
   <link rel="stylesheet" href="/feed.css" />
+  <link rel="stylesheet" href="/explore.css" />
   
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -33,15 +34,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js" defer></script>
   <script src="/home.js" defer></script>
-  <script src="/feed.js" defer></script>
+  <script src="/explore.js" defer></script>
 </head>
 <body>
-  <% user.following.forEach((e,i) => user.following[i] = e.toString()) %>
-  <% following = following.filter(e => user.following.includes(e.createdBy.toString()))%>
-  <% following = following.concat(galleries)%>
   <% following = following.sort((a,b)=>{ console.log(a.date - b.date); return a.date.getTime() - b.date.getTime()})%>
   <% following = following.reverse()%>
-  <% console.log(following)%>
+  <% let followingUserIds = user.following.map(i => i.shift())%>
+  <% console.log(recommendedUsers)%>
+  <% console.log(user.following.map(i => i.shift()))%>
+  <% console.log(recommendedUsers[8]._id.toString())%>
+  <% console.log(followingUserIds.includes(recommendedUsers[8]._id.toString()))%>
   <i data-show="show-side-navigation1" class="uil-bars show-side-btn"></i>
   <aside style="background-color: <%=user.themeColor%>;"
     class="sidebar position-fixed top-0 left-0 overflow-auto h-100 float-left"
@@ -198,30 +200,68 @@
     </div>
   </div>
   <div id="wrapper">
-    <main class="content">
-      <div class="feed-grid">
-        <%for(let i = 0; i < following.length; i++){%>
-        <div class="card-half">
-          <div class="galleryPayload"><%= JSON.stringify(following[i].images) %></div>
-          <a href="/gallery/<%=following[i]._id%>/<%=following[i].createdBy[0]%>/<%=following[i].createdBy[1]%>" class="card-imgs" style="width: intial;">
-            <%for(let j = 0; j < following[i].images.length; j++){%>
-              <div class="previewItem" style="background-image: url(<%=following[i].images[j][0].url%>);"></div>
-            <%}%>
-          </a>
-          <div class="card-text">
-            <h4><a href="/gallery/<%=following[i]._id%>/<%=following[i].createdBy[0]%>/<%=following[i].createdBy[1]%>"><%=following[i].name%></a></h4>
-            <p><%=following[i].theme%></p>
+      <div class="mainSearch">
+        <form action="">
+          <div class="searchBar">
+            <i class="fa-solid fa-magnifying-glass"></i>         
+            <input type="text" placeholder="Search for Gallery">
           </div>
-          <ul class="card-tools">
-            <li class="tools-item"><i class="fa fa-heart like"></i><span class="tools-count"><%=following[i].likes.length%></span></li>
-            <li class="tools-item"><i class="fa-solid fa-retweet"></i><span class="tools-count"><%=following[i].repostedBy.length%></span></li>
-            <li class="tools-item"><span class="label"><i class="fa-regular fa-star"></i></span><span class="tools-count">0</span></li>
-          </ul>
-          <a href="/user/<%=following[i].createdBy[1]%>/<%=following[i].createdBy[0]%>" class="galleryOwner"><p>by: <%=following[i].createdBy[1] %></p></a>
-        </div>
-        <%}%>
+          <div class="searchDivider"></div>
+          <div class="selectBar">
+            <select name="" id="">
+              <option value="" disabled selected>Search by Theme</option>
+              <%for(let i = 0; i < themes[0].themes.length; i++){%>
+                <option value="<%=themes[0].themes[i]%>">
+                  <%=themes[0].themes[i]%>
+                </option>
+                <%}%>
+            </select>
+          </div>
+        </form>
       </div>
-    </main>
+      <div class="recommend">
+        <div class="carousel">
+          <div class="wrap">
+            <ul>
+              <% for(let i = 0; i < recommendedUsers.length; i++){%>
+                <%if(!followingUserIds.includes( recommendedUsers[i]._id.toString() )){%>
+                  <%if(recommendedUsers[i]._id.toString() !== user._id.toString()){%>
+                <li><img class="recommendedProfile" src="<%=recommendedUsers[i].profileImg%>" alt="">
+                  <p><a href="/user/<%=recommendedUsers[i].local.userName%>/<%=recommendedUsers[i]._id%>"><%=recommendedUsers[i].displayName%></a></p>
+                </li>
+                  <% } %>
+                <% } %>
+              <% } %>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="result">
+        <main class="content">
+          <div class="feed-grid">
+            <%for(let i = 0; i < following.length; i++){%>
+            <div class="card-half">
+              <div class="galleryPayload"><%= JSON.stringify(following[i].images) %></div>
+              <a href="/gallery/<%=following[i]._id%>/<%=following[i].createdBy[0]%>/<%=following[i].createdBy[1]%>" class="card-imgs" style="width: intial;">
+                <%for(let j = 0; j < following[i].images.length; j++){%>
+                  <div class="previewItem" style="background-image: url(<%=following[i].images[j][0].url%>);"></div>
+                <%}%>
+              </a>
+              <div class="card-text">
+                <h4><a href="/gallery/<%=following[i]._id%>/<%=following[i].createdBy[0]%>/<%=following[i].createdBy[1]%>"><%=following[i].name%></a></h4>
+                <p><%=following[i].theme%></p>
+              </div>
+              <ul class="card-tools">
+                <li class="tools-item"><i class="fa fa-heart like"></i><span class="tools-count"><%=following[i].likes.length%></span></li>
+                <li class="tools-item"><i class="fa-solid fa-retweet"></i><span class="tools-count"><%=following[i].repostedBy.length%></span></li>
+                <li class="tools-item"><span class="label"><i class="fa-regular fa-star"></i></span><span class="tools-count">0</span></li>
+              </ul>
+              <a href="/user/<%=following[i].createdBy[1]%>/<%=following[i].createdBy[0]%>" class="galleryOwner"><p>by: <%=following[i].createdBy[1] %></p></a>
+            </div>
+            <%}%>
+          </div>
+        </main>
+      </div>
   </div>
   </div><!-- /.container -->
   </div>

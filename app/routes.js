@@ -15,54 +15,143 @@ module.exports = function (app, passport, db) {
     db.collection("themes")
       .find()
       .toArray((err, themes) => {
-        db.collection("galleries")
-          .find({ createdBy: ObjectId(req.user._id) })
-          .toArray((err, galleries) => {
-            res.render("home.ejs", {
-              objectId: ObjectId,
-              user: req.user,
-              themes: themes,
-              galleries: galleries,
-            });
+        db.collection("users")
+          .find()
+          .toArray(async (err, allUsers) => {
+            db.collection("chat")
+              .find({ participants: req.user._id.toString() })
+              .toArray(async (err, myMessages) => {
+                db.collection("galleries")
+                  .find({
+                    createdBy: [
+                      req.user._id.toString(),
+                      req.user.local.userName,
+                    ],
+                  })
+                  .toArray((err, galleries) => {
+                    res.render("home.ejs", {
+                      objectId: ObjectId,
+                      user: req.user,
+                      themes: themes,
+                      galleries: galleries,
+                      allUsers,
+                      myMessages,
+                    });
+                  });
+              });
           });
       });
   });
+  app.get("/user/:userName/:id", isLoggedIn, function (req, res) {
+    db.collection("themes")
+      .find()
+      .toArray((err, themes) => {
+        db.collection("galleries")
+          .find({
+            createdBy: [req.params.id, req.params.userName],
+          })
+          .toArray((err, galleries) => {
+            db.collection("users")
+              .find({
+                _id: ObjectId(req.params.id),
+              })
+              .toArray((err, otherUser) => {
+                res.render("otherUser.ejs", {
+                  objectId: ObjectId,
+                  user: req.user,
+                  themes: themes,
+                  galleries: galleries,
+                  otherUser: otherUser,
+                });
+              });
+          });
+      });
+  });
+  app.get(
+    "/gallery/:galleryId/:userId/:userName",
+    isLoggedIn,
+    function (req, res) {
+      db.collection("themes")
+        .find()
+        .toArray((err, themes) => {
+          db.collection("galleries")
+            .find({
+              createdBy: [req.params.userId, req.params.userName],
+            })
+            .toArray((err, galleries) => {
+              db.collection("galleries")
+                .find({
+                  _id: ObjectId(req.params.galleryId),
+                })
+                .toArray((err, galleryData) => {
+                  db.collection("users")
+                    .find({
+                      _id: ObjectId(req.params.userId),
+                    })
+                    .toArray((err, otherUser) => {
+                      res.render("gallery.ejs", {
+                        objectId: ObjectId,
+                        user: req.user,
+                        themes: themes,
+                        galleries: galleries,
+                        galleryData: galleryData,
+                        otherUser: otherUser,
+                      });
+                    });
+                });
+            });
+        });
+    }
+  );
 
   app.get("/feed", isLoggedIn, async function (req, res) {
     db.collection("themes")
       .find()
       .toArray(async (err, themes) => {
-        var followingArr = [];
         db.collection("galleries")
-          .find({ createdBy: ObjectId(req.user._id) })
+          .find({
+            createdBy: [req.user._id.toString(), req.user.local.userName],
+          })
           .toArray(async (err, galleries) => {
-            if (req.user.following.length === 0) {
-              res.render("feed.ejs", {
-                objectId: ObjectId,
-                user: req.user,
-                themes: themes,
-                galleries: galleries,
-                following: followingArr,
+            db.collection("galleries")
+              .find()
+              .toArray(async (err, following) => {
+                res.render("feed.ejs", {
+                  objectId: ObjectId,
+                  user: req.user,
+                  themes: themes,
+                  galleries: galleries,
+                  following: following,
+                });
               });
-            } else {
-              for (let i = 0; i < req.user.following.length; i++) {
-                db.collection("galleries")
-                  .find({ createdBy: ObjectId(req.user.following[i][0]) })
-                  .toArray(async (err, following) => {
-                    console.log("im running $$$$");
-                    followingArr.push(following);
-                  });
-              }
-              await res.render("feed.ejs", {
-                objectId: ObjectId,
-                user: req.user,
-                themes: themes,
-                galleries: galleries,
-                following: followingArr,
-              });
-            }
           });
-        console.log(followingArr);
+      });
+  });
+
+  app.get("/explore", isLoggedIn, async function (req, res) {
+    db.collection("themes")
+      .find()
+      .toArray(async (err, themes) => {
+        db.collection("users")
+          .find()
+          .toArray(async (err, recommendedUsers) => {
+            db.collection("galleries")
+              .find()
+              .toArray(async (err, galleries) => {
+                db.collection("galleries")
+                  .find()
+                  .toArray(async (err, following) => {
+                    res.render("explore.ejs", {
+                      objectId: ObjectId,
+                      user: req.user,
+                      recommendedUsers: recommendedUsers,
+                      themes: themes,
+                      galleries: galleries,
+                      following: following,
+                    });
+                  });
+              });
+          });
       });
   });
 
@@ -70,11 +159,23 @@ module.exports = function (app, passport, db) {
     db.collection("messages")
       .find()
       .toArray((err, result) => {
-        if (err) return console.log(err);
-        res.render("setting.ejs", {
-          user: req.user,
-          messages: result,
-        });
+        db.collection("themes")
+          .find()
+          .toArray((err, themes) => {
+            db.collection("galleries")
+              .find({
+                createdBy: [req.user._id.toString(), req.user.local.userName],
+              })
+              .toArray((err, galleries) => {
+                if (err) return console.log(err);
+                res.render("setting.ejs", {
+                  user: req.user,
+                  themes,
+                  galleries,
+                  messages: result,
+                });
+              });
+          });
       });
   });
 
@@ -115,7 +216,7 @@ module.exports = function (app, passport, db) {
         img: req.body.img,
         layout: req.body.layout,
         likes: 0,
-        userID: ObjectID(req.user._id),
+        userID: ObjectId(req.user._id),
       },
       (err, result) => {
         if (err) return console.log(err);
@@ -126,59 +227,187 @@ module.exports = function (app, passport, db) {
   });
 
   app.post("/newGallery", (req, res) => {
+    let imagesArr = [];
+
     if (req.body.addsNewTheme === "on") req.body.addsNewTheme = true;
     else req.body.addsNewTheme = false;
 
     if (req.body.hasPost === "on") req.body.hasPost = true;
     else req.body.hasPost = false;
 
-    if (req.body.theme[1] === "") req.body.theme = req.body.theme[0];
-    else req.body.theme = req.body.theme[1];
-
     console.log(req.body);
-    let imagesArr = [];
-    for (let i = 0; i < req.body.url.length; i++) {
-      imagesArr[i] = [
+    if (Array.isArray(req.body.url)) {
+      for (let i = 0; i < req.body.url.length; i++) {
+        imagesArr[i] = [
+          {
+            _id: uuidv4(),
+            url: req.body.url[i],
+            caption: req.body.caption[i],
+            likes: [],
+            comments: [],
+            createdBy: ObjectId(req.user._id),
+            date: new Date(),
+          },
+        ];
+      }
+    } else {
+      imagesArr.push([
         {
           _id: uuidv4(),
-          url: req.body.url[i],
-          caption: req.body.caption[i],
+          url: req.body.url,
+          caption: req.body.caption,
           likes: [],
           comments: [],
           createdBy: ObjectId(req.user._id),
           date: new Date(),
         },
-      ];
+      ]);
     }
     console.log(imagesArr);
-    db.collection("galleries").save(
-      {
-        name: req.body.name,
-        theme: req.body.theme,
-        images: imagesArr,
-        likes: [],
-        repostedBy: [],
-        createdBy: ObjectId(req.user._id),
-        date: new Date(),
-      },
-      (err, result) => {
-        if (err) return console.log(err);
-        console.log("saved to database");
-        res.redirect("/profile");
-      }
-    );
-    if (req.body.addsNewTheme) {
-      db.collection("themes").updateOne(
+
+    if (!req.body.addsNewTheme) {
+      db.collection("galleries").save(
         {
-          _id: ObjectId("63850774a3991e28a424406a"),
+          name: req.body.name,
+          theme: req.body.theme,
+          images: imagesArr,
+          likes: [],
+          repostedBy: [],
+          createdBy: [req.user._id.toString(), req.user.local.userName],
+          date: new Date(),
         },
-        { $addToSet: { themes: req.body.theme } },
+        (err, result) => {
+          if (err) return console.log(err);
+          console.log("saved to database");
+          res.redirect("/profile");
+        }
+      );
+    }
+    if (req.body.addsNewTheme) {
+      db.collection("galleries").save(
+        {
+          name: req.body.name,
+          theme: req.body.newTheme,
+          images: imagesArr,
+          likes: [],
+          repostedBy: [],
+          createdBy: [req.user._id.toString(), req.user.local.userName],
+          date: new Date(),
+        },
         (err, result) => {
           if (err) return console.log(err);
           console.log("saved to database");
         }
       );
+      db.collection("themes").updateOne(
+        {
+          _id: ObjectId("63850774a3991e28a424406a"),
+        },
+        { $addToSet: { themes: req.body.newTheme } },
+        (err, result) => {
+          if (err) return console.log(err);
+          console.log("saved to database");
+          res.redirect("/feed");
+        }
+      );
     }
+  });
+
+  app.post("/newPost", (req, res) => {
+    let path = `images`;
+    db.collection("galleries").updateOne(
+      {
+        _id: ObjectId(req.body.galleryId),
+      },
+      {
+        $push: {
+          [path]: [
+            {
+              _id: uuidv4(),
+              url: req.body.url,
+              caption: req.body.caption,
+              likes: [],
+              comments: [],
+              createdBy: req.user._id,
+              date: new Date(),
+            },
+          ],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: false,
+      },
+      (err, result) => {
+        if (err) return console.log(err);
+        console.log("saved to database");
+        res.redirect("/feed");
+      }
+    );
+  });
+  app.post("/getChat", (req, res) => {
+    db.collection("chat").updateOne(
+      {
+        participants: [req.user._id.toString(), req.body.selectedUserId],
+      },
+      {
+        $push: {
+          messages: [
+            "chat created",
+            "Operator",
+            `${new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}, ${new Date().toLocaleDateString("en-us", {
+              weekday: "long",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}`,
+          ],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: true,
+      },
+      (err, result) => {
+        if (err) return console.log(err);
+        console.log("saved to database");
+      }
+    );
+  });
+  app.post("/newMessage", (req, res) => {
+    db.collection("chat").updateOne(
+      {
+        participants: [req.user._id.toString(), req.body.otherUser],
+      },
+      {
+        $push: {
+          messages: [
+            req.body.newMessage,
+            req.user.local.userName,
+            `${new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}, ${new Date().toLocaleDateString("en-us", {
+              weekday: "long",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}`,
+          ],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: false,
+      },
+      (err, result) => {
+        if (err) return console.log(err);
+        console.log("saved to database");
+      }
+    );
   });
 
   app.post("/addComment", (req, res) => {
@@ -205,6 +434,65 @@ module.exports = function (app, passport, db) {
         if (err) return console.log(err);
         console.log("saved to database");
         res.redirect("/profile");
+      }
+    );
+  });
+
+  app.put("/user/:otherUser/follow", (req, res) => {
+    db.collection("users").updateOne(
+      { _id: ObjectId(req.body._id) },
+      {
+        $addToSet: {
+          followers: [req.user._id, req.user.local.userName],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: false,
+      }
+    );
+    db.collection("users").updateOne(
+      { _id: ObjectId(req.user._id) },
+      {
+        $addToSet: {
+          following: [req.body._id, req.body.otherUser],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: false,
+      },
+      (err, result) => {
+        if (err) return res.send(err);
+      }
+    );
+  });
+  app.put("/user/:otherUser/unfollow", (req, res) => {
+    db.collection("users").updateOne(
+      { _id: ObjectId(req.body._id) },
+      {
+        $pull: {
+          followers: [req.user._id, req.user.local.userName],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: false,
+      }
+    );
+    db.collection("users").updateOne(
+      { _id: ObjectId(req.user._id) },
+      {
+        $pull: {
+          following: [req.body._id, req.body.otherUser],
+        },
+      },
+      {
+        sort: { _id: -1 },
+        upsert: false,
+      },
+      (err, result) => {
+        if (err) return res.send(err);
       }
     );
   });
@@ -249,7 +537,14 @@ module.exports = function (app, passport, db) {
 
   app.put("/updateUser", (req, res) => {
     console.log(req.body);
-    let displayName, firstTitle, secondTitle, bio, profileImg, bannerImg, email;
+    let displayName,
+      firstTitle,
+      secondTitle,
+      bio,
+      profileImg,
+      bannerImg,
+      email,
+      themeColor;
     req.body.displayName === ""
       ? (displayName = req.user.displayName)
       : (displayName = req.body.displayName);
@@ -269,6 +564,9 @@ module.exports = function (app, passport, db) {
     req.body.email === ""
       ? (email = req.user.local.email)
       : (email = req.body.email);
+    req.body.themeColor === ""
+      ? (themeColor = req.user.themeColor)
+      : (themeColor = req.body.themeColor);
     db.collection("users").findOneAndUpdate(
       { _id: ObjectId(req.body._id) },
       {
@@ -280,6 +578,7 @@ module.exports = function (app, passport, db) {
           profileImg: profileImg,
           bannerImg: bannerImg,
           email: email,
+          themeColor: themeColor,
         },
       },
       {
@@ -288,7 +587,6 @@ module.exports = function (app, passport, db) {
       },
       (err, result) => {
         if (err) return res.send(err);
-        res.send(result);
       }
     );
   });

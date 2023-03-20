@@ -24,10 +24,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
-    />
     <script
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
       defer
@@ -37,15 +33,14 @@
       defer
     ></script>
     <script src="/home.js" defer></script>
+    <script src="/follow.js" defer></script>
   </head>
   <body>
-
-    <% let followingUserIds = user.following.map(i => i.shift())%>
-    <%console.log(allUsers)%>
-    <%console.log(myMessages)%>
-
+    <% user.following.forEach((e,i) => user.following[i] = e.toString()) %>
+    <%console.log([otherUser[0]._id.toString(), otherUser[0].local.userName])%>
+    <%console.log(user.following)%>
+    <%console.log(user.following.includes([otherUser[0]._id, otherUser[0].local.userName]))%>
     <i data-show="show-side-navigation1" class="uil-bars show-side-btn"></i>
-
     <aside style="background-color: <%=user.themeColor%>;"
       class="sidebar position-fixed top-0 left-0 overflow-auto h-100 float-left"
       id="show-side-navigation1"
@@ -202,43 +197,63 @@
     </div>
 
     <section id="wrapper">
-      <p class="chatDrawer"><i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-message"></i></p>
-      <p class="sideDrawer"><i class="fa-solid fa-list"></i><i class="fa-solid fa-arrow-right"></i></p>
       <main>
-        <div class="jumbo" style="background: url('<%=user.bannerImg%>')"></div>
+        <div class="jumbo" style="background: url('<%=otherUser[0].bannerImg%>')"></div>
         <div class="container icons">
           <div
             class="big-icon"
             style="
-              background: url('<%=user.profileImg%>') center center no-repeat;
+              background: url('<%=otherUser[0].profileImg%>') center center no-repeat;
             "
           ></div>
           <div class="rate">
-            <span class="followers" style="border: 2px solid <%= user.themeColor%>;">
-              <span class="topHead" style="background-color: <%=user.themeColor%>;">Followers</span>
-              <span><%= user.followers.length%></span>
+            <a
+              class="star-btn add-btn btn-floating btn-large waves-effect waves-light blue darken-1"
+              ><i class="fa-solid fa-message" style="background: #19cb6a;"></i>
+            </a>
+            <a
+              class="like-btn add-btn btn-floating btn-large waves-effect waves-light blue darken-1"
+              >
+              <%if(user.following.includes([otherUser[0]._id.toString(), otherUser[0].local.userName])){%>
+                <i class="material-icons unfollow toggle" style="background: #f44236;">person_remove</i>
+                <%}else{%>
+              <i class="material-icons follow toggle" style="background: #1d88e5;">person_add</i>
+              <%}%>
+              </a
+            >
+            <span class="followers" style="border: 2px solid <%= otherUser[0].themeColor%>;">
+              <span class="topHead" style="background-color: <%=otherUser[0].themeColor%>;">Followers</span>
+              <span><%= otherUser[0].followers.length%></span>
             </span>
           </div>
           <div class="add">
-            <span class="following" style="border: 2px solid <%= user.themeColor%>;">
-              <span class="topHead" style="background-color: <%=user.themeColor%>;">Following</span>
-              <span><%= user.following.length%></span>
+            <span class="following" style="border: 2px solid <%= otherUser[0].themeColor%>;">
+              <span class="topHead" style="background-color: <%=otherUser[0].themeColor%>;">Following</span>
+              <span><%= otherUser[0].following.length%></span>
             </span>
+            <a
+              class="add-btn btn-floating btn-large waves-effect waves-light red" style="opacity: 0; position: absolute; z-index: -1000;"
+              ><i class="material-icons follow" style="opacity: 0;">person_remove</i></a
+            >
+            <a
+              class="add-btn btn-floating btn-large waves-effect waves-light red" style="opacity: 0; position: absolute; z-index: -1000;"
+              ><i class="material-icons unfollow" style="opacity: 0;">person_add</i></a
+            >
           </div>
         </div>
         <div class="details">
-          <h3 style="margin-bottom: 0px"><%= user.displayName%></h3>
+          <h3 style="margin-bottom: 0px"><%= otherUser[0].displayName%></h3>
           <span style="color: gray; margin-bottom: 15px"
-            >@<%= user.local.userName%></span
+            >@<%= otherUser[0].local.userName%></span
           >
-          <p><%= user.firstTitle %> / <%= user.secondTitle %></p>
+          <p><%= otherUser[0].firstTitle %> / <%= otherUser[0].secondTitle %></p>
         </div>
         <div class="container bio">
           <div class="title">
             <h6>Biography</h6>
           </div>
           <div class="content">
-            <p><%=user.bio%></p>
+            <p><%=otherUser[0].bio%></p>
           </div>
           <hr />
         </div>
@@ -266,7 +281,7 @@
              <% for(let i = galleries.length - 1; i >= 0;
             i--){ %> <% for(let j = galleries[i].images.length - 1; j >= 0; j--){ %>
             <a href="/gallery/<%=galleries[i]._id%>/<%=galleries[i].createdBy[0]%>/<%=galleries[i].createdBy[1]%>#&gid=1&pid=<%=j+1%>" class="col s12 m6" style="height: 460px; flex-basis: 50% !important; flex-grow: 0 !important; margin-left: 0;">
-              <div class="card postCard" style="height: 100%; justify-content: space-between; background-image: url(<%=galleries[i].images[j][0].url%>); background-size: 100%; background-color: <%=user.themeColor%>;
+              <div class="card postCard" style="height: 100%; justify-content: space-between; background-image: url(<%=galleries[i].images[j][0].url%>); background-size: 100%; background-color: <%=otherUser[0].themeColor%>;
                 background-repeat: no-repeat;
                 background-position: center;
                 position: relative;
@@ -343,134 +358,5 @@
         </div>
       </footer>
     </section>
-
-    <div class="chat">
-      <div class="chatContainer clearfix">
-        <div class="people-list" id="people-list">
-          <div class="search">
-            <input type="text" placeholder="search" />
-
-          </div>
-          <ul class="list">
-            <%for(let i = 0; i < allUsers.length; i++){%>
-              <%if(followingUserIds.includes( allUsers[i]._id.toString() )){%>
-            <li class="chatUser clearfix">
-              <div class="chatUserId invisId"><%=allUsers[i]._id%></div>
-              <div class="avatar hack" style="border: 2px solid #62c462;">
-                <img src="<%=allUsers[i].profileImg%>" alt="avatar" class="hack"/>
-              </div>
-              <div class="about hack">
-                <div class="name hack"><%=allUsers[i].displayName%></div>
-                <div class="status hack">
-                  <i class="fa fa-circle online hack"></i> online
-                </div>
-              </div>
-            </li>
-            <%}%>
-            <%}%>
-            <li class="clearfix">
-              <div class="avatar">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_02.jpg" alt="avatar" />
-              </div>
-              <div class="about">
-                <div class="name">Aiden Chavez</div>
-                <div class="status">
-                  <i class="fa fa-circle offline"></i> left 7 mins ago
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="chatHistory">
-          <div class="chat-header clearfix">
-            <p class="backArrow"><i class="fa-solid fa-arrow-left"></i></p>
-            <div class="avatar">
-              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" class="chat-pfp"/>
-            </div>
-            <div class="chat-about">
-              <div class="chat-with"></div>
-            </div>
-          </div> <!-- end chat-header -->
-          
-          <div class="chat-history">
-            <%for(let i = 0; i < myMessages.length; i++){%>
-            <ul class="chatThreads <%=myMessages[i].participants[0]%>-<%=myMessages[i].participants[1]%>">
-              <%for(let j = 0; j < myMessages[i].messages.length; j++){%>
-              <li class="clearfix">
-                <%if(myMessages[i].messages[j][1] === user.local.userName){%>
-                <div class="message-data align-right">
-                  <span class="message-data-time" ><%=myMessages[i].messages[j][2]%></span> &nbsp; &nbsp;
-                  <span class="message-data-name" ></span> <i class="fa fa-circle me"></i>
-                </div>
-                <%}else{%>
-                  <div class="message-data">
-                    <span class="message-data-name"><i class="fa fa-circle online"></i></span>
-                    <span class="message-data-time"><%=myMessages[i].messages[j][2]%></span>
-                  </div>
-                  <%}%>
-                <%if(myMessages[i].messages[j][1] === user.local.userName){%>
-                <div class="message other-message">
-                  <%=myMessages[i].messages[j][0]%>
-                </div>
-                <%}else{%>
-                  <div class="message my-message">
-                    <%=myMessages[i].messages[j][0]%>
-                  </div>
-                <%}%>
-              </li>
-              <%}%>
-              <!-- <li>
-                <div class="message-data">
-                  <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                  <span class="message-data-time">10:12 AM, Today</span>
-                </div>
-                <div class="message my-message">
-                  Are we meeting today? Project has been already finished and I have results to show you.
-                </div>
-              </li> -->
-            </ul>
-            <%}%>
-          </div> <!-- end chat-history -->
-          
-          <div class="chat-message clearfix">
-            <form action="/newMessage" method="post">
-            <textarea name="newMessage" id="message-to-send" placeholder ="Type your message" rows="3" name="newMessage" class="chat-newMessage"></textarea>
-            <input type="text" class="chat-otherUser invisId" name="otherUser">        
-            <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-            <i class="fa fa-file-image-o"></i>
-            <button>Send</button>
-            </form>
-          </div> <!-- end chat-message -->
-          
-        </div> <!-- end chat -->
-        
-      </div> <!-- end container -->
-    
-    <script id="message-template" type="text/x-handlebars-template">
-      <li class="clearfix">
-        <div class="message-data align-right">
-          <span class="message-data-time" >{{time}}, Today</span> &nbsp; &nbsp;
-          <span class="message-data-name" >Olia</span> <i class="fa fa-circle me"></i>
-        </div>
-        <div class="message other-message float-right">
-          {{messageOutput}}
-        </div>
-      </li>
-    </script>
-    
-    <script id="message-response-template" type="text/x-handlebars-template">
-      <li>
-        <div class="message-data">
-          <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-          <span class="message-data-time">{{time}}, Today</span>
-        </div>
-        <div class="message my-message">
-          {{response}}
-        </div>
-      </li>
-    </script>    
-    </div>
-
   </body>
 </html>

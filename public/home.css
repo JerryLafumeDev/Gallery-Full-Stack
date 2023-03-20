@@ -26,7 +26,7 @@
 body {
   font-family: "Inter", sans-serif !important;
   background-color: var(--dk-darker-bg);
-  font-size: 0.925rem;
+  font-size: 0.925em;
   display: flex;
 }
 
@@ -50,7 +50,7 @@ body {
   position: relative;
   -webkit-background-clip: text;
   background-clip: text;
-  background-size: 30rem 100%;
+  background-size: 30em 100%;
   background-image: linear-gradient(
     90deg,
     #111827 0%,
@@ -68,28 +68,28 @@ body {
 @-webkit-keyframes marquee-image {
   from {
     background-position: 0% 50%;
-    filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(131, 58, 180, 0.2));
+    filter: drop-shadow(0.2em 0.2em 0.5em rgba(131, 58, 180, 0.2));
   }
   25% {
-    filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(253, 29, 29, 0.2));
+    filter: drop-shadow(0.2em 0.2em 0.5em rgba(253, 29, 29, 0.2));
   }
   to {
-    background-position: 30rem 50%;
-    filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(131, 58, 180, 0.2));
+    background-position: 30em 50%;
+    filter: drop-shadow(0.2em 0.2em 0.5em rgba(131, 58, 180, 0.2));
   }
 }
 
 @keyframes marquee-image {
   from {
     background-position: 0% 50%;
-    filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(131, 58, 180, 0.2));
+    filter: drop-shadow(0.2em 0.2em 0.5em rgba(131, 58, 180, 0.2));
   }
   25% {
-    filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(253, 29, 29, 0.2));
+    filter: drop-shadow(0.2em 0.2em 0.5em rgba(253, 29, 29, 0.2));
   }
   to {
-    background-position: 30rem 50%;
-    filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(131, 58, 180, 0.2));
+    background-position: 30em 50%;
+    filter: drop-shadow(0.2em 0.2em 0.5em rgba(131, 58, 180, 0.2));
   }
 }
 #wrapper.fullwidth {
@@ -103,7 +103,7 @@ body {
   background-color: var(--sidebar-bg-color) !important;
   width: var(--sidebar-width) !important;
   transition: all 0.3s ease-in-out !important;
-  transform: translateX(0) !important;
+  transform: translateX(0);
   z-index: 9999999 !important;
 }
 
@@ -125,7 +125,7 @@ body {
 
 .sidebar .sidebar-header p {
   color: var(--dk-gray-400);
-  font-size: 0.825rem;
+  font-size: 0.825em;
 }
 
 .sidebar .search .form-control ~ i {
@@ -136,7 +136,7 @@ body {
 .search input {
   background: rgb(178 167 193 / 40%);
   transition: all 0.1s ease-in-out;
-  margin-left: 1rem;
+  margin-left: 1em;
   width: 80%;
 }
 .search input:hover {
@@ -151,7 +151,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0px 0px 0px 1rem;
+  padding: 0px 0px 0px 1em;
   transition: all 0.3s ease-in-out;
 }
 .sidebar > ul > li:hover {
@@ -181,7 +181,7 @@ body {
 
 .sidebar ul > li > i {
   font-size: 18px;
-  margin-right: 0.7rem;
+  margin-right: 0.7em;
   color: var(--dk-gray-500);
 }
 
@@ -203,8 +203,8 @@ aside.sidebar {
 }
 
 .sidebar ul .sidebar-dropdown > li > a {
-  font-size: 0.85rem;
-  padding: 0.5rem 0;
+  font-size: 0.85em;
+  padding: 0.5em 0;
   display: block;
 }
 /* End dropdown menu */
@@ -586,7 +586,7 @@ main .pics .row .col .card #first-img {
 }
 main .pics .row .col .card #second-img {
   height: 100%;
-  background: url(http://tremendouswallpapers.com/wp-content/uploads/2014/12/django-calvin-candie-leonardo-dicaprio-gives-the-hammer-in-movie-274680.jpg)
+  background: url(http://temendouswallpapers.com/wp-content/uploads/2014/12/django-calvin-candie-leonardo-dicaprio-gives-the-hammer-in-movie-274680.jpg)
     center center;
   background-size: cover;
 }
@@ -677,25 +677,70 @@ span.followers {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -35.5px;
   font-size: 17px;
   /* height: fit-content; */
+  position: absolute;
+  top: 260px;
+  left: 815px;
+  width: 100px;
+  height: 100px !important;
+  border-radius: 100%;
+  overflow: hidden;
   /* border-radius: 20px; */
+  transition: all 0.3s ease-in-out;
+}
+span.following {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  /* height: fit-content; */
+  position: absolute;
+  width: 100px;
+  top: 260px;
+  right: 560px;
+  height: 100px !important;
+  border-radius: 100%;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
 }
 span.followers .topHead {
-  background-color: #252636 !important;
-  border: 1px solid var(--dk-gray-200);
-  border-radius: 20px 20px 0px 0px !important;
+  color: white;
+  align-items: flex-end;
+  font-size: 15px;
+  /* border: 1px solid var(--dk-gray-200); */
+  /* border-radius: 100% 100% 0px 0px !important; */
+}
+span.following .topHead {
+  color: white;
+  align-items: flex-end;
+  font-size: 15px;
+  /* border: 1px solid var(--dk-gray-200); */
+  /* border-radius: 100% 100% 0px 0px !important; */
 }
 span.followers span {
   display: flex;
   padding: 5px;
-  color: var(--dk-gray-200) !important;
   justify-content: center;
-  background-color: gray;
+  background-color: white;
   width: 100%;
-  border: 1px solid #111827;
-  border-radius: 0px 0px 20px 20px !important;
+  height: 50%;
+  font-size: 20px;
+  /* border: 1px solid #111827; */
+  /* border-radius: 0px 0px 200% 200% !important; */
+  align-items: flex-start;
+}
+span.following span {
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+  background-color: white;
+  width: 100%;
+  height: 50%;
+  font-size: 20px;
+  /* border: 1px solid #111827; */
+  /* border-radius: 0px 0px 200% 200% !important; */
+  align-items: flex-start;
 }
 .galleryOverlay {
   height: 100vh;
@@ -731,6 +776,14 @@ span.followers span {
   width: 100%;
   transition: all 0.3s ease-in-out;
 }
+li.chatUser.clearfix {
+  position: relative;
+  background: transparent !important;
+}
+.hack {
+  position: relative;
+  z-index: -10;
+}
 .borderImg img {
   object-fit: cover;
   height: 100%;
@@ -761,6 +814,12 @@ span.followers span {
   width: 100%;
   bottom: -61px !important;
   transition: all 0.3s ease-in-out;
+}
+.postCard {
+  transition: all 0.3s ease-in-out !important;
+}
+.postCard:hover {
+  background-size: 60% !important;
 }
 .postCard:hover > .postCardContent {
   top: 0px !important;
@@ -805,11 +864,15 @@ body {
 .form-module {
   position: relative;
   background: #ffffff;
-  max-width: 320px;
+  max-width: 400px;
   width: 100%;
   border-top: 5px solid #33b5e5;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+}
+.formInputs {
+  overflow-y: scroll;
+  max-height: 400px;
 }
 .form-module .closeBtn {
   cursor: pointer;
@@ -908,9 +971,12 @@ select.selectTheme {
   position: relative;
   align-items: center;
 }
+.inputGroup input {
+  width: 40%;
+}
 .deletePostBtn {
   position: absolute;
-  right: -25px;
+  right: 0px;
   background: orangered;
   padding: 2px 5px;
   font-size: 10px;
@@ -968,4 +1034,310 @@ span.switchBtn {
   .fab {
     display: none;
   }
+}
+
+/* chatHistory */
+i.fa-solid.fa-arrow-left {
+  font-size: 17px;
+}
+
+p.chatDrawer {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  height: 50px;
+  width: 75px;
+  font-size: 27px;
+  color: white;
+  background: #444753;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  gap: 5px;
+}
+i.fa-solid.fa-arrow-right {
+  font-size: 17px;
+}
+
+p.sideDrawer {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  height: 50px;
+  width: 75px;
+  font-size: 27px;
+  color: white;
+  background: #444753;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  gap: 5px;
+}
+.sideDrawer:hover,
+.chatDrawer:hover {
+  cursor: pointer;
+  opacity: 90%;
+}
+.chatContainer {
+  margin: 0 auto;
+  width: 100%;
+  background: #444753;
+  height: 100vh;
+  position: fixed;
+}
+
+.people-list {
+  width: 100%;
+  float: left;
+  height: 100%;
+}
+.people-list .search {
+  padding: 20px;
+  display: flex;
+  height: 90px;
+  width: 44%;
+}
+.people-list input {
+  border-radius: 3px !important;
+  border: none !important;
+  padding: 14px !important;
+  color: white;
+  background: #6a6c75 !important;
+  width: 40% !important;
+  font-size: 14px !important;
+  height: 1rem !important;
+}
+.people-list .fa-search {
+  position: relative;
+  left: -25px;
+}
+.chatHistory,
+.people-list {
+  transition: all 0.3s ease-in-out;
+}
+.people-list ul {
+  height: 100%;
+  overflow-y: scroll;
+}
+.people-list ul li {
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.people-list ul li:hover {
+  background-color: #606475;
+  cursor: pointer;
+}
+.about .name {
+  color: whitesmoke;
+}
+.avatar {
+  float: left;
+  width: 57px;
+  height: 57px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.people-list .about {
+  float: left;
+  margin-top: 8px;
+}
+.people-list .about {
+  padding-left: 8px;
+}
+.people-list .status {
+  color: #92959e;
+}
+
+.chatHistory {
+  width: 100%;
+  float: left;
+  background: #444753;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #434651;
+  flex-direction: column;
+}
+.chatHistory .chat-header {
+  padding: 20px;
+  border-bottom: 2px solid #80808021;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.chatHistory .chat-header img {
+  float: left;
+}
+.chatHistory .chat-header .chat-about {
+  float: left;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+.chatHistory .chat-header .chat-with {
+  font-weight: bold;
+  font-size: 16px;
+  color: whitesmoke;
+}
+.chatHistory .chat-header .chat-num-messages {
+  color: #92959e;
+}
+.chatHistory .chat-header .fa-star {
+  float: right;
+  color: #d8dadf;
+  font-size: 20px;
+  margin-top: 12px;
+}
+.chatHistory .chat-history {
+  padding: 30px 30px 20px;
+  border-bottom: 2px solid #8080809e;
+  overflow-y: scroll;
+  height: 80vh;
+  width: 20%;
+}
+.chatHistory .chat-history .message-data {
+  margin-bottom: 15px;
+  display: flex;
+}
+.chatHistory .chat-history .message-data-time {
+  color: #a8aab1;
+  /* padding-left: 6px; */
+  width: 100%;
+  display: block;
+  font-size: 12px;
+  text-align: center;
+}
+.chatHistory .chat-history .message {
+  color: white;
+  padding: 18px 20px;
+  line-height: 26px;
+  font-size: 16px;
+  border-radius: 7px;
+  margin-bottom: 30px;
+  width: 90%;
+  position: relative;
+}
+.chatHistory .chat-history .message:after {
+  bottom: 100%;
+  left: 7%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #86bb71;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.chatHistory .chat-history .my-message {
+  background: #86bb71;
+}
+.chatHistory .chat-history .other-message {
+  background: #94c2ed;
+  float: right;
+}
+.chatHistory .chat-history .other-message:after {
+  border-bottom-color: #94c2ed;
+  left: 93%;
+}
+.chatHistory .chat-message {
+  padding: 10px 30px;
+  width: 20%;
+  height: 10vh;
+}
+.chatHistory .chat-message textarea {
+  width: 100%;
+  border: none;
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  resize: none;
+  color: whitesmoke;
+  outline: 1px solid #bbf5f166;
+}
+.chatHistory .chat-message .fa-file-o,
+.chatHistory .chat-message .fa-file-image-o {
+  font-size: 16px;
+  color: gray;
+  cursor: pointer;
+}
+.chatHistory .chat-message button {
+  float: right;
+  color: #94c2ed;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #f2f5f821;
+  border-radius: 8px;
+  padding: 4px;
+}
+.chatHistory .chat-message button:hover {
+  color: #75b1e8;
+}
+
+.online,
+.offline,
+.me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+.online {
+  color: #86bb71;
+}
+
+.offline {
+  color: #e38968;
+}
+
+.me {
+  color: #94c2ed;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.float-right {
+  float: right;
+}
+p.backArrow {
+  color: white;
+  background: rgb(64, 60, 60);
+  border-radius: 100%;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  /* font-size: 27px !important; */
+}
+p.backArrow:hover {
+  cursor: pointer;
+}
+.chat .avatar {
+  margin-left: 23px;
+}
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
 }
